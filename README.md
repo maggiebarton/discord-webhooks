@@ -1,6 +1,6 @@
 # Discord Question of the Day
 
-A small, dependency-free Node.js script that posts one daily question through a Discord incoming webhook.
+A small, dependency-free Node.js script that posts one daily question or native poll through a Discord incoming webhook.
 
 ## Requirements
 
@@ -11,7 +11,7 @@ A small, dependency-free Node.js script that posts one daily question through a 
 
 1. Open your Discord server and choose **Server Settings**.
 2. Go to **Integrations** > **Webhooks**.
-3. Create a webhook, name it, and select your `#general` channel.
+3. Create a webhook, name it, and select your channel.
 4. Copy its webhook URL. Treat this URL like a password: anyone who has it can post to the channel.
 
 ## Configure the project
@@ -20,9 +20,29 @@ A small, dependency-free Node.js script that posts one daily question through a 
 cp .env.example .env
 ```
 
-Replace the placeholder `DISCORD_WEBHOOK_URL` in `.env` with the URL copied from Discord. The `.env` file is ignored by Git.
+Replace `DISCORD_TEST_WEBHOOK_URL` and `DISCORD_PRODUCTION_WEBHOOK_URL` in `.env` with the URLs copied from each Discord server. The `.env` file is ignored by Git. The old `DISCORD_WEBHOOK_URL` is still accepted as a production fallback.
 
-Edit `src/questions.js` to add, remove, or rewrite questions.
+`QUESTION_MESSAGE_PREFIX` and `POLL_MESSAGE_PREFIX` optionally customize the label shown above each prompt type. The older `MESSAGE_PREFIX` setting still works for questions.
+
+Edit `src/prompts.js` to add, remove, or rewrite questions and polls. A question looks like:
+
+```js
+{ type: "question", text: "What made you smile today?" }
+```
+
+A poll looks like:
+
+```js
+{
+  type: "poll",
+  text: "When should game night be?",
+  answers: ["Friday", "Saturday", "Sunday"],
+  durationHours: 24,
+  allowMultiselect: false
+}
+```
+
+Polls need 2–10 answers. Discord allows up to 300 characters in the poll question, 55 characters per answer, and a duration from 1 to 768 hours. `durationHours` and `allowMultiselect` are optional and default to `24` and `false`.
 
 ## Run it
 
@@ -38,6 +58,12 @@ Post today's message:
 npm run post
 ```
 
+Posts target the production server by default. To send to the test server instead:
+
+```sh
+npm run post -- --server test
+```
+
 Post a specific question instead of today's automatically selected one:
 
 ```sh
@@ -50,7 +76,27 @@ Preview a specific question without posting it:
 npm run dry-run -- --question "What is everyone looking forward to this weekend?"
 ```
 
-The extra `--` tells npm to pass the following options to the script. Forcing a question affects only that run; it does not change the normal daily rotation.
+The extra `--` tells npm to pass the following options to the script. Forcing a question affects only that run; it does not change the normal mixed daily rotation.
+
+Preview one of the existing polls by its exact question text:
+
+```sh
+npm run dry-run -- --poll "Pineapple on pizza: yes or no?"
+```
+
+Post that poll for real:
+
+```sh
+npm run post -- --poll "Pineapple on pizza: yes or no?"
+```
+
+Send that poll to the test server:
+
+```sh
+npm run post -- --server test --poll "Pineapple on pizza: yes or no?"
+```
+
+Poll matching is case-insensitive. A misspelled or unknown poll prints the available poll names without posting anything.
 
 Run the tests:
 

@@ -1,7 +1,9 @@
 export function parseOptions(args) {
   const options = {
     dryRun: false,
-    question: undefined
+    question: undefined,
+    poll: undefined,
+    server: "production"
   };
 
   for (let index = 0; index < args.length; index += 1) {
@@ -24,7 +26,35 @@ export function parseOptions(args) {
       continue;
     }
 
+    if (argument === "--poll") {
+      const value = args[index + 1];
+
+      if (!value || value.startsWith("--")) {
+        throw new Error('Provide poll text after --poll, for example: --poll "Pineapple on pizza: yes or no?"');
+      }
+
+      options.poll = value.trim();
+      index += 1;
+      continue;
+    }
+
+    if (argument === "--server") {
+      const value = args[index + 1]?.toLowerCase();
+
+      if (!["test", "production"].includes(value)) {
+        throw new Error("--server must be either test or production.");
+      }
+
+      options.server = value;
+      index += 1;
+      continue;
+    }
+
     throw new Error(`Unknown option: ${argument}`);
+  }
+
+  if (options.question && options.poll) {
+    throw new Error("Use either --question or --poll, not both.");
   }
 
   return options;

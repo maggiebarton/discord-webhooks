@@ -1,4 +1,4 @@
-export const questions = [
+const questions = [
   "What's the weirdest food combination you genuinely enjoy?",
   "If you had to fight one animal once a year, what would you pick?",
   "What's an opinion you'll defend even though everyone disagrees?",
@@ -19,7 +19,6 @@ export const questions = [
   "What would your WWE entrance music be?",
   "If calories didn't exist, what are you eating every day?",
   "What's the funniest injury you've ever had?",
-
   "Would you rather always have to whisper or always have to yell?",
   "Would you rather have unlimited money but no internet, or unlimited internet but no money?",
   "Would you rather fight 100 duck-sized horses or 1 horse-sized duck?",
@@ -30,10 +29,9 @@ export const questions = [
   "Would you rather always have wet socks or a rock in your shoe?",
   "Would you rather only drink warm water or room-temperature soda?",
   "Would you rather win $100k or have your favorite sports team win a championship?",
-
   "What's the first game you ever got addicted to?",
   "Which game deserves a remake?",
-  "What's your biggest gaming rage moment?",
+  "Who is most likely to rage quit?",
   "Which NPC deserves to get punched?",
   "What's your comfort game?",
   "If you could live inside one game world, which one?",
@@ -46,7 +44,6 @@ export const questions = [
   "What's your gaming hot take?",
   "Which game has the best community?",
   "Which game has the worst community?",
-
   "If you could max one building instantly in Clash of Clans, what would you pick?",
   "What's the most satisfying troop to watch?",
   "What's your favorite Town Hall design?",
@@ -72,18 +69,16 @@ export const questions = [
   "What's your favorite Clash event Supercell has ever done?",
   "What's the funniest player name you've ever seen?",
   "If your base could talk after getting 3-starred, what would it say?",
-
   "Aliens arrive tomorrow. What's the first meme you show them?",
   "You have to swap lives with someone in this server. Who are you picking?",
   "If you had warning labels, what would yours say?",
-  "What's your Roman Empire?",
+  "Who is most likely to spend $100 on gems?",
   "If you became famous overnight, what would it be for?",
   "What's something you'd ban immediately if you became president?",
   "If your Google search history became public, how cooked are you?",
   "What's one conspiracy theory that's just funny enough to believe?",
   "What's your zombie apocalypse job?",
   "What's the weirdest compliment you've ever received?",
-
   "Pineapple on pizza: yes or no?",
   "Is cereal soup?",
   "Is a hot dog a sandwich?",
@@ -94,7 +89,6 @@ export const questions = [
   "If you had to eat one meal forever, what would it be?",
   "What's your most unpopular food opinion?",
   "Sweet or savory?",
-
   "Who in this server would survive the longest in a zombie apocalypse?",
   "Who's most likely to forget both war attacks?",
   "Who's most likely to accidentally 1-star a dip?",
@@ -106,3 +100,66 @@ export const questions = [
   "What's the funniest thing that's happened in this server?",
   "What's one Discord quote from someone here that you'll never forget?"
 ];
+
+const pollAnswers = new Map([
+  ["Would you rather always have to whisper or always have to yell?", ["Always whisper", "Always yell"]],
+  [
+    "Would you rather have unlimited money but no internet, or unlimited internet but no money?",
+    ["Unlimited money, no internet", "Unlimited internet, no money"]
+  ],
+  [
+    "Would you rather fight 100 duck-sized horses or 1 horse-sized duck?",
+    ["100 duck-sized horses", "1 horse-sized duck"]
+  ],
+  [
+    "Would you rather never eat pizza again or never eat tacos again?",
+    ["Never eat pizza again", "Never eat tacos again"]
+  ],
+  ["Would you rather sneeze glitter or cry maple syrup?", ["Sneeze glitter", "Cry maple syrup"]],
+  [
+    "Would you rather only be able to use Internet Explorer forever or dial-up internet?",
+    ["Internet Explorer forever", "Dial-up internet"]
+  ],
+  ["Would you rather have a rewind button or a pause button for life?", ["Rewind button", "Pause button"]],
+  ["Would you rather always have wet socks or a rock in your shoe?", ["Always-wet socks", "A rock in your shoe"]],
+  ["Would you rather only drink warm water or room-temperature soda?", ["Warm water", "Room-temperature soda"]],
+  [
+    "Would you rather win $100k or have your favorite sports team win a championship?",
+    ["Win $100k", "My team wins a championship"]
+  ],
+  ["Keyboard & mouse or controller?", ["Keyboard & mouse", "Controller"]],
+  [
+    "Who's your favorite hero?",
+    ["Barbarian King", "Archer Queen", "Grand Warden", "Royal Champion", "Minion Prince", "Dragon Duke"]
+  ],
+  [
+    "What's worse: missing both war attacks or attacking the wrong base?",
+    ["Missing both attacks", "Attacking the wrong base"]
+  ],
+  ["Air attacks or ground attacks?", ["Air attacks", "Ground attacks"]],
+  ["Pineapple on pizza: yes or no?", ["Yes", "No"]],
+  ["Is cereal soup?", ["Yes", "No"]],
+  ["Is a hot dog a sandwich?", ["Yes", "No"]],
+  ["Fries or onion rings?", ["Fries", "Onion rings"]],
+  ["Sweet or savory?", ["Sweet", "Savory"]]
+]);
+
+const standalonePolls = [
+  { type: "poll", text: "Android or iPhone?", answers: ["Android", "iPhone"], durationHours: 24 },
+  { type: "poll", text: "Is water wet?", answers: ["Yes", "No", "Shut up Karen"], durationHours: 24 },
+  {
+    type: "poll",
+    text: "Pick the best kind of weather.",
+    answers: ["Sunny", "Rainy", "Snowy", "Cloudy"],
+    durationHours: 24
+  }
+];
+
+const convertedQuestions = questions.map((text) => {
+  const answers = pollAnswers.get(text);
+  return answers
+    ? { type: "poll", text, answers, durationHours: 24 }
+    : { type: "question", text };
+});
+
+export const prompts = [...convertedQuestions, ...standalonePolls];
