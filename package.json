@@ -1,0 +1,15 @@
+{
+  "name": "discord-question-of-the-day",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Post a daily question to a Discord channel using an incoming webhook.",
+  "scripts": {
+    "post": "node --env-file=.env src/post-question.js",
+    "dry-run": "node --env-file-if-exists=.env src/post-question.js --dry-run",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=20.6"
+  }
+}
