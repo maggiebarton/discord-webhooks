@@ -63,7 +63,7 @@ npm test
 Open your crontab with `crontab -e` and add a line like this to post every day at 9:00 AM in the computer's local timezone:
 
 ```cron
-0 9 * * * cd /Users/maggiebarton/Personal/discord && /usr/bin/env npm run post >> /tmp/discord-qotd.log 2>&1
+0 9 * * * cd /path/to/discord/project && /usr/bin/env npm run post >> /tmp/discord-qotd.log 2>&1
 ```
 
 The computer must be awake at the scheduled time. For reliable posting while your computer is off, run the script from an always-on host or a scheduled cloud workflow.
